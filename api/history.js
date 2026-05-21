@@ -4,11 +4,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const redisUrl = process.env.STORAGE_URL;
-  const redisToken = process.env.STORAGE_TOKEN;
+  const redisUrl = process.env.KV_REST_API_URL;
+  const redisToken = process.env.KV_REST_API_TOKEN;
 
   async function redis(command) {
-    const resp = await fetch(`${redisUrl}`, {
+    const resp = await fetch(redisUrl, {
       method: 'POST',
       headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(command)
