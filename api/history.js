@@ -8,7 +8,8 @@ export default async function handler(req, res) {
   const redisToken = process.env.KV_REST_API_TOKEN;
 
   if (!redisUrl || !redisToken) {
-    return res.status(500).json({ error: `Variables manquantes: URL=${redisUrl ? 'ok' : 'MANQUANTE'}, TOKEN=${redisToken ? 'ok' : 'MANQUANT'}` });
+    const allVars = Object.keys(process.env).filter(k => k.includes('KV') || k.includes('REDIS') || k.includes('UPSTASH')).join(', ');
+    return res.status(500).json({ error: `Variables dispo: ${allVars || 'aucune'}` });
   }
 
   async function redis(command) {
