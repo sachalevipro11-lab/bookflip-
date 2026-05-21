@@ -7,6 +7,10 @@ export default async function handler(req, res) {
   const redisUrl = process.env.KV_REST_API_URL;
   const redisToken = process.env.KV_REST_API_TOKEN;
 
+  if (!redisUrl || !redisToken) {
+    return res.status(500).json({ error: `Variables manquantes: URL=${redisUrl ? 'ok' : 'MANQUANTE'}, TOKEN=${redisToken ? 'ok' : 'MANQUANT'}` });
+  }
+
   async function redis(command) {
     const resp = await fetch(redisUrl, {
       method: 'POST',
