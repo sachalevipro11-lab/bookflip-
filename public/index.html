@@ -12,428 +12,453 @@
 <title>BookFlip</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0e0c09;--surface:#1a1712;--surface2:#252118;--border:#332e24;
-  --gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:rgba(201,168,76,0.13);
-  --text:#f0ead8;--text-dim:#8a7e65;--text-muted:#4a4435;
-  --green:#6ab187;--red:#c46a5a;--blue:#6a8fc4;--purple:#9b7fc4;
-  --radius:10px;
-}
+:root{--bg:#0e0c09;--surface:#1a1712;--surface2:#252118;--border:#332e24;--gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:rgba(201,168,76,0.13);--text:#f0ead8;--text-dim:#8a7e65;--text-muted:#4a4435;--green:#6ab187;--red:#c46a5a;--blue:#6a8fc4;--purple:#9b7fc4;--r:10px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;}
-body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh;padding-bottom:calc(1rem + env(safe-area-inset-bottom));}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh;padding-bottom:calc(2rem + env(safe-area-inset-bottom));}
 
-/* HEADER */
-header{padding:0.9rem 1.2rem;padding-top:calc(0.9rem + env(safe-area-inset-top));border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.8rem;position:sticky;top:0;background:var(--bg);z-index:100;}
-.logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--gold);}
+/* NAV */
+header{padding:0.8rem 1rem;padding-top:calc(0.8rem + env(safe-area-inset-top));border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.6rem;position:sticky;top:0;background:var(--bg);z-index:100;}
+.logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--gold);flex:1;}
 .logo span{color:var(--text-dim);font-style:italic;}
-.tagline{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;border-left:1px solid var(--border);padding-left:0.8rem;flex:1;}
-.step-badge{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:0.2rem 0.6rem;display:none;}
+.nav-btn{background:transparent;border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.7rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+.nav-btn.active{color:var(--gold);border-color:rgba(201,168,76,0.4);background:var(--gold-dim);}
 
 main{padding:1rem;max-width:600px;margin:0 auto;}
 
-/* INSTALL BANNER */
-#install-banner{background:var(--gold-dim);border:1px solid rgba(201,168,76,0.25);border-radius:var(--radius);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:var(--text-dim);line-height:1.5;display:none;}
-#install-banner strong{color:var(--gold);display:block;margin-bottom:0.2rem;font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.05em;text-transform:uppercase;}
+/* PAGES */
+.page{display:none;}.page.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-/* STEP INDICATOR */
-.steps{display:flex;gap:0;margin-bottom:1.2rem;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.step{flex:1;padding:0.7rem 0.5rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);border-right:1px solid var(--border);transition:all 0.25s;cursor:default;}
+/* STEPS */
+.steps{display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1rem;}
+.step{flex:1;padding:0.6rem 0.3rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);border-right:1px solid var(--border);transition:all 0.2s;}
 .step:last-child{border-right:none;}
 .step.active{color:var(--gold);background:var(--gold-dim);}
 .step.done{color:var(--green);background:rgba(106,177,135,0.08);}
-.step-num{display:block;font-size:0.9rem;margin-bottom:0.1rem;}
+.step-num{display:block;font-size:0.85rem;margin-bottom:0.1rem;}
 
 /* UPLOAD */
-.upload-zone{border:1px dashed var(--border);border-radius:var(--radius);padding:2rem 1rem;text-align:center;cursor:pointer;position:relative;background:var(--surface);margin-bottom:1rem;transition:all 0.2s;}
+.upload-zone{border:1px dashed var(--border);border-radius:var(--r);padding:1.8rem 1rem;text-align:center;cursor:pointer;position:relative;background:var(--surface);margin-bottom:0.8rem;transition:all 0.2s;}
 .upload-zone:active{background:var(--gold-dim);border-color:var(--gold);}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-icon{font-size:2rem;margin-bottom:0.6rem;display:block;}
-.upload-zone h2{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:0.3rem;}
-.upload-zone p{color:var(--text-dim);font-size:0.78rem;}
+.upload-icon{font-size:1.8rem;margin-bottom:0.5rem;display:block;}
+.upload-zone h2{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:0.25rem;}
+.upload-zone p{color:var(--text-dim);font-size:0.76rem;}
 
-/* PREVIEW */
-#preview-wrap{display:none;margin-bottom:1rem;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
-#preview-img{width:100%;max-height:240px;object-fit:contain;background:#111;display:block;}
-.preview-bar{background:var(--surface);padding:0.5rem 0.8rem;display:flex;justify-content:space-between;border-top:1px solid var(--border);}
-.preview-bar span{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text-dim);}
+#preview-wrap{display:none;margin-bottom:0.8rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);}
+#preview-img{width:100%;max-height:200px;object-fit:contain;background:#111;display:block;}
+.preview-bar{background:var(--surface);padding:0.45rem 0.8rem;display:flex;justify-content:space-between;border-top:1px solid var(--border);}
+.preview-bar span{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text-dim);}
 
-/* CONTEXT FORM */
-#context-form{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;}
-#context-form h3{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.8rem;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;}
-.form-group{display:flex;flex-direction:column;gap:0.4rem;}
-.form-group label{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text-dim);letter-spacing:0.05em;text-transform:uppercase;}
-.form-group input,.form-group select{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.8rem;color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:0.85rem;outline:none;-webkit-appearance:none;}
+/* FORMS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.9rem;margin-bottom:0.8rem;}
+.card h3{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.7rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:0.7rem;}
+.form-group{display:flex;flex-direction:column;gap:0.3rem;}
+.form-group label{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.05em;text-transform:uppercase;}
+.form-group input,.form-group select{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.55rem 0.7rem;color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:0.82rem;outline:none;-webkit-appearance:none;}
 .form-group input:focus,.form-group select:focus{border-color:var(--gold);}
 .form-group select option{background:var(--surface2);}
 
 /* BUTTONS */
-.btn-primary{width:100%;padding:0.95rem;background:var(--gold);color:#0e0c09;border:none;border-radius:var(--radius);font-family:'DM Mono',monospace;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;margin-bottom:0.8rem;}
-.btn-primary:active{background:var(--gold-light);transform:scale(0.98);}
-.btn-primary:disabled{opacity:0.45;transform:none;}
-.btn-secondary{width:100%;padding:0.75rem;background:transparent;color:var(--text-dim);border:1px solid var(--border);border-radius:var(--radius);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;margin-bottom:0.8rem;}
+.btn{width:100%;padding:0.9rem;border:none;border-radius:var(--r);font-family:'DM Mono',monospace;font-size:0.78rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;margin-bottom:0.6rem;}
+.btn-gold{background:var(--gold);color:#0e0c09;}
+.btn-gold:active{background:var(--gold-light);transform:scale(0.98);}
+.btn-gold:disabled{opacity:0.45;transform:none;}
+.btn-outline{background:transparent;color:var(--text-dim);border:1px solid var(--border);}
+.btn-green{background:rgba(106,177,135,0.15);color:var(--green);border:1px solid rgba(106,177,135,0.3);}
+.btn-blue{background:rgba(106,143,196,0.15);color:var(--blue);border:1px solid rgba(106,143,196,0.3);}
+.btn-sm{padding:0.55rem 1rem;font-size:0.65rem;width:auto;margin-bottom:0;}
 
 /* LOADING */
-#loading{display:none;text-align:center;padding:2.5rem 1rem;}
-.spinner{width:34px;height:34px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 1rem;}
+#loading{display:none;text-align:center;padding:2rem 1rem;}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 0.8rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-label{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-bottom:0.3rem;}
-.loading-bar-wrap{width:200px;height:3px;background:var(--border);border-radius:2px;margin:0.8rem auto 0;overflow:hidden;}
-.loading-bar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.5s ease;}
+.loading-label{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-bottom:0.5rem;}
+.loading-bar-wrap{width:180px;height:3px;background:var(--border);border-radius:2px;margin:0.6rem auto 0;overflow:hidden;}
+.loading-bar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.6s ease;}
 
 /* TABS */
-#results{display:none;animation:fadeUp 0.35s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.tab-bar{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;}
-.tab{flex:1;padding:0.65rem 0.4rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);border-right:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.tab-bar{display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:0.8rem;}
+.tab{flex:1;padding:0.6rem 0.3rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.03em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);border-right:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
 .tab:last-child{border-right:none;}
 .tab.active{color:var(--gold);background:var(--gold-dim);}
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
 
 /* BOOK HEADER */
-.book-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:0.8rem;display:flex;gap:0.8rem;}
-.book-thumb{width:55px;height:75px;object-fit:cover;border-radius:4px;flex-shrink:0;border:1px solid var(--border);}
-.book-meta h1{font-family:'DM Serif Display',serif;font-size:1.1rem;line-height:1.2;margin-bottom:0.2rem;}
-.book-meta .author{color:var(--text-dim);font-size:0.8rem;margin-bottom:0.5rem;}
-.tags{display:flex;gap:0.35rem;flex-wrap:wrap;}
-.tag{padding:0.12rem 0.45rem;border-radius:3px;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.04em;text-transform:uppercase;}
+.book-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.9rem;margin-bottom:0.8rem;display:flex;gap:0.8rem;}
+.book-thumb{width:52px;height:70px;object-fit:cover;border-radius:3px;flex-shrink:0;border:1px solid var(--border);}
+.book-meta h1{font-family:'DM Serif Display',serif;font-size:1.05rem;line-height:1.2;margin-bottom:0.2rem;}
+.book-meta .author{color:var(--text-dim);font-size:0.78rem;margin-bottom:0.45rem;}
+.tags{display:flex;gap:0.3rem;flex-wrap:wrap;}
+.tag{padding:0.1rem 0.4rem;border-radius:3px;font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.04em;text-transform:uppercase;}
 .tag-genre{background:rgba(106,145,196,0.15);color:var(--blue);border:1px solid rgba(106,145,196,0.25);}
 .tag-year{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.2);}
-.tag-edition{background:rgba(106,177,135,0.12);color:var(--green);border:1px solid rgba(106,177,135,0.2);}
 .tag-rare{background:rgba(155,127,196,0.15);color:var(--purple);border:1px solid rgba(155,127,196,0.25);}
 
-/* SCORE BANNER */
-.score-banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:0.9rem;margin-bottom:0.8rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;}
+/* SCORE */
+.score-banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r);padding:0.8rem;margin-bottom:0.8rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.3rem;}
 .score-item{text-align:center;}
-.score-label{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.25rem;}
-.score-value{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--gold-light);line-height:1;}
-.score-sub{font-size:0.62rem;color:var(--text-dim);margin-top:0.12rem;}
+.score-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.2rem;}
+.score-value{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--gold-light);line-height:1;}
+.score-sub{font-size:0.6rem;color:var(--text-dim);margin-top:0.1rem;}
 
-/* INFO CARDS */
-.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.9rem;margin-bottom:0.8rem;}
-.info-card h3{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.65rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
-.platform-row{display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;gap:0.5rem;}
+/* PLATFORMS */
+.platform-row{display:flex;align-items:center;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.78rem;gap:0.4rem;}
 .platform-row:last-child{border-bottom:none;}
-.platform-name{color:var(--text);flex:1;}
-.platform-price{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text-dim);width:32px;text-align:right;}
-.bar-wrap{width:60px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.bar-wrap{width:55px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
 .bar-fill{height:100%;background:var(--gold);border-radius:2px;}
-.platform-conseil{font-size:0.72rem;color:var(--text-muted);grid-column:1/-1;padding-bottom:0.3rem;display:none;}
 
 /* MONTHS */
-.months-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;align-items:flex-end;height:55px;margin-bottom:0.5rem;}
+.months-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;align-items:flex-end;height:48px;margin-bottom:0.4rem;}
 .month-bar{text-align:center;}
 .month-fill{border-radius:2px;margin:0 auto 2px;width:100%;}
-.month-label{font-family:'DM Mono',monospace;font-size:0.42rem;color:var(--text-muted);text-transform:uppercase;}
+.month-label{font-family:'DM Mono',monospace;font-size:0.4rem;color:var(--text-muted);text-transform:uppercase;}
 
 /* VERDICT */
-.verdict{display:inline-flex;align-items:center;gap:0.3rem;padding:0.22rem 0.65rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.6rem;}
+.verdict{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.5rem;}
 .verdict.high{background:rgba(106,177,135,0.15);color:var(--green);border:1px solid rgba(106,177,135,0.25);}
 .verdict.medium{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.2);}
 .verdict.low{background:rgba(196,106,90,0.15);color:var(--red);border:1px solid rgba(196,106,90,0.25);}
 
-/* ADVICE */
-.advice-card{border-radius:var(--radius);padding:0.9rem;margin-bottom:0.8rem;}
-.advice-card h3{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;}
-.advice-card p{font-size:0.82rem;color:var(--text);line-height:1.65;}
-.advice-gold{background:var(--gold-dim);border:1px solid rgba(201,168,76,0.2);}
-.advice-gold h3{color:var(--gold);}
-.advice-blue{background:rgba(106,143,196,0.08);border:1px solid rgba(106,143,196,0.2);}
-.advice-blue h3{color:var(--blue);}
-
-/* FICHE CARD */
-.fiche-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:0.8rem;overflow:hidden;}
-.fiche-header{padding:0.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.fiche-platform{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);}
-.fiche-platform-badge{font-family:'DM Mono',monospace;font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:20px;}
+/* FICHE */
+.fiche-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:0.8rem;overflow:hidden;}
+.fiche-header{padding:0.7rem 0.9rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.fiche-platform{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text);}
+.badge{font-family:'DM Mono',monospace;font-size:0.58rem;padding:0.18rem 0.5rem;border-radius:20px;}
 .badge-vinted{background:rgba(106,177,135,0.15);color:var(--green);border:1px solid rgba(106,177,135,0.25);}
 .badge-ebay{background:rgba(106,143,196,0.15);color:var(--blue);border:1px solid rgba(106,143,196,0.25);}
 .badge-lbc{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.2);}
-.fiche-body{padding:1rem;}
-.fiche-section{margin-bottom:1rem;}
+.fiche-body{padding:0.9rem;}
+.fiche-section{margin-bottom:0.8rem;}
 .fiche-section:last-child{margin-bottom:0;}
-.fiche-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.4rem;}
-.fiche-content{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.7rem;font-size:0.82rem;line-height:1.6;color:var(--text);position:relative;}
-.fiche-content.copyable{cursor:pointer;}
-.fiche-content.copyable:active{background:var(--gold-dim);}
-.copy-hint{position:absolute;top:0.4rem;right:0.5rem;font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--text-muted);}
-.copy-success{color:var(--green) !important;}
-.hashtags-wrap{display:flex;gap:0.4rem;flex-wrap:wrap;}
-.hashtag{background:rgba(106,145,196,0.12);color:var(--blue);border:1px solid rgba(106,145,196,0.2);border-radius:20px;padding:0.2rem 0.55rem;font-family:'DM Mono',monospace;font-size:0.65rem;cursor:pointer;}
+.fiche-label{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.35rem;}
+.fiche-content{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.65rem;font-size:0.8rem;line-height:1.6;color:var(--text);position:relative;cursor:pointer;}
+.fiche-content:active{background:var(--gold-dim);}
+.copy-hint{position:absolute;top:0.35rem;right:0.45rem;font-family:'DM Mono',monospace;font-size:0.52rem;color:var(--text-muted);}
+.copy-ok{color:var(--green)!important;}
+.hashtags-wrap{display:flex;gap:0.35rem;flex-wrap:wrap;}
+.hashtag{background:rgba(106,145,196,0.12);color:var(--blue);border:1px solid rgba(106,145,196,0.2);border-radius:20px;padding:0.18rem 0.5rem;font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;}
 .hashtag:active{background:rgba(106,145,196,0.25);}
-.prix-row{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;}
-.prix-value{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--gold-light);}
-.prix-info{font-size:0.75rem;color:var(--text-dim);}
+.prix-row{display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;}
+.prix-value{font-family:'DM Serif Display',serif;font-size:1.7rem;color:var(--gold-light);}
+.prix-info{font-size:0.72rem;color:var(--text-dim);}
 
-/* COPY ALL BTN */
-.copy-all-btn{width:100%;padding:0.75rem;background:var(--surface2);color:var(--text-dim);border:1px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;margin-top:0.3rem;transition:all 0.2s;}
-.copy-all-btn:active{border-color:var(--gold);color:var(--gold);}
+/* PUBLISH BUTTONS */
+.publish-btns{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.7rem;}
+.publish-btn{padding:0.65rem 0.5rem;border:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.3rem;}
+.publish-btn:active{transform:scale(0.97);}
+.pub-vinted{background:rgba(106,177,135,0.15);color:var(--green);border:1px solid rgba(106,177,135,0.3);}
+.pub-ebay{background:rgba(106,143,196,0.15);color:var(--blue);border:1px solid rgba(106,143,196,0.3);}
+.pub-lbc{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.2);}
+.pub-copy{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border);}
+.ebay-result{margin-top:0.6rem;padding:0.6rem;border-radius:6px;font-size:0.78rem;background:rgba(106,177,135,0.1);border:1px solid rgba(106,177,135,0.2);color:var(--green);}
+.ebay-result a{color:var(--blue);text-decoration:underline;}
+
+/* HISTORY */
+.history-search{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.7rem 0.9rem;color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:0.85rem;outline:none;margin-bottom:0.8rem;}
+.history-search:focus{border-color:var(--gold);}
+.history-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.8rem;margin-bottom:0.6rem;display:flex;gap:0.8rem;align-items:center;cursor:pointer;transition:all 0.2s;}
+.history-item:active{background:var(--surface2);}
+.history-thumb{width:40px;height:55px;object-fit:cover;border-radius:3px;border:1px solid var(--border);flex-shrink:0;background:var(--surface2);}
+.history-info{flex:1;min-width:0;}
+.history-title{font-family:'DM Serif Display',serif;font-size:0.95rem;margin-bottom:0.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.history-author{font-size:0.75rem;color:var(--text-dim);margin-bottom:0.3rem;}
+.history-meta{display:flex;gap:0.4rem;align-items:center;}
+.history-price{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gold);}
+.history-date{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted);}
+.history-del{padding:0.3rem 0.5rem;background:transparent;border:none;color:var(--text-muted);font-size:0.9rem;cursor:pointer;flex-shrink:0;}
+.history-empty{text-align:center;padding:3rem 1rem;color:var(--text-muted);font-size:0.85rem;}
+.history-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.8rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.7rem;text-align:center;}
+.stat-val{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--gold-light);}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.1rem;}
 
 /* ERROR */
-.error-card{background:rgba(196,106,90,0.1);border:1px solid rgba(196,106,90,0.25);border-radius:var(--radius);padding:1rem;color:var(--red);font-size:0.83rem;line-height:1.55;}
+.error-card{background:rgba(196,106,90,0.1);border:1px solid rgba(196,106,90,0.25);border-radius:var(--r);padding:0.9rem;color:var(--red);font-size:0.82rem;line-height:1.5;margin-bottom:0.8rem;}
+
+/* INSTALL */
+#install-banner{background:var(--gold-dim);border:1px solid rgba(201,168,76,0.25);border-radius:var(--r);padding:0.7rem 0.9rem;margin-bottom:0.8rem;font-size:0.76rem;color:var(--text-dim);line-height:1.5;display:none;}
+#install-banner strong{color:var(--gold);display:block;margin-bottom:0.15rem;font-size:0.68rem;font-family:'DM Mono',monospace;letter-spacing:0.05em;text-transform:uppercase;}
+
+/* EBAY MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;}
+.modal{background:var(--surface);border-radius:var(--r) var(--r) 0 0;padding:1.2rem;width:100%;max-width:600px;margin:0 auto;border-top:1px solid var(--border);}
+.modal h3{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:0.3rem;}
+.modal p{font-size:0.78rem;color:var(--text-dim);margin-bottom:0.8rem;line-height:1.5;}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">Book<span>Flip</span></div>
-  <div class="tagline">Analyseur IA</div>
-  <div class="step-badge" id="step-badge">Étape 1/3</div>
+  <button class="nav-btn active" onclick="showPage('analyse')">📸 Analyser</button>
+  <button class="nav-btn" onclick="showPage('history')">📚 Historique</button>
 </header>
 
 <main>
   <div id="install-banner">
     <strong>📲 Installer sur iPhone</strong>
-    Safari → bouton Partager ↑ → "Sur l'écran d'accueil"
+    Safari → Partager ↑ → "Sur l'écran d'accueil"
   </div>
 
-  <!-- STEP INDICATOR -->
-  <div class="steps" id="steps-bar">
-    <div class="step active" id="s1"><span class="step-num">📸</span>Photo</div>
-    <div class="step" id="s2"><span class="step-num">📋</span>Infos</div>
-    <div class="step" id="s3"><span class="step-num">✨</span>Résultat</div>
-  </div>
-
-  <!-- STEP 1: PHOTO -->
-  <div id="step1">
-    <div class="upload-zone">
-      <input type="file" id="file-input" accept="image/*" capture="environment">
-      <span class="upload-icon">📚</span>
-      <h2>Photo de la couverture</h2>
-      <p>Appuie pour prendre une photo ou choisir depuis ta galerie</p>
+  <!-- PAGE ANALYSE -->
+  <div class="page active" id="page-analyse">
+    <div class="steps">
+      <div class="step active" id="s1"><span class="step-num">📸</span>Photo</div>
+      <div class="step" id="s2"><span class="step-num">📋</span>Infos</div>
+      <div class="step" id="s3"><span class="step-num">✨</span>Résultat</div>
     </div>
-    <div id="preview-wrap">
-      <img id="preview-img" src="" alt="Aperçu">
-      <div class="preview-bar">
-        <span id="file-name">—</span>
-        <span id="file-size">—</span>
+
+    <!-- STEP 1 -->
+    <div id="step1">
+      <div class="upload-zone">
+        <input type="file" id="file-input" accept="image/*" capture="environment">
+        <span class="upload-icon">📚</span>
+        <h2>Photo de la couverture</h2>
+        <p>Appuie pour prendre une photo ou choisir depuis ta galerie</p>
       </div>
+      <div id="preview-wrap">
+        <img id="preview-img" src="" alt="">
+        <div class="preview-bar"><span id="file-name">—</span><span id="file-size">—</span></div>
+      </div>
+      <button class="btn btn-gold" id="next-btn" style="display:none">Continuer →</button>
     </div>
-    <button class="btn-primary" id="next-btn" style="display:none">Continuer →</button>
-  </div>
 
-  <!-- STEP 2: CONTEXT -->
-  <div id="step2" style="display:none">
-    <div id="context-form" style="display:block">
-      <h3>Informations sur le livre</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Prix d'achat (€)</label>
-          <input type="number" id="prix-achat" placeholder="ex: 3" min="0" step="0.5">
-        </div>
-        <div class="form-group">
-          <label>État du livre</label>
-          <select id="etat-livre">
-            <option value="">— Choisir —</option>
-            <option value="Neuf">Neuf / Jamais lu</option>
-            <option value="Très bon état">Très bon état</option>
-            <option value="Bon état">Bon état</option>
-            <option value="État correct">État correct</option>
-            <option value="Mauvais état">Mauvais état</option>
-          </select>
+    <!-- STEP 2 -->
+    <div id="step2" style="display:none">
+      <div class="card">
+        <h3>Informations sur le livre</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prix d'achat (€)</label>
+            <input type="number" id="prix-achat" placeholder="ex: 3" min="0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label>État</label>
+            <select id="etat-livre">
+              <option value="">— Choisir —</option>
+              <option value="Neuf">Neuf</option>
+              <option value="Très bon état">Très bon état</option>
+              <option value="Bon état">Bon état</option>
+              <option value="État correct">État correct</option>
+              <option value="Mauvais état">Mauvais état</option>
+            </select>
+          </div>
         </div>
       </div>
-      <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.8rem">Ces infos permettent d'affiner le prix et la description.</p>
-    </div>
-    <button class="btn-primary" id="analyze-btn">⚡ Analyser & Générer les fiches</button>
-    <button class="btn-secondary" id="back-btn">← Retour</button>
-  </div>
-
-  <!-- LOADING -->
-  <div id="loading">
-    <div class="spinner"></div>
-    <div class="loading-label" id="loading-text">Identification du livre…</div>
-    <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  </div>
-
-  <!-- RESULTS -->
-  <div id="results">
-    <!-- TABS -->
-    <div class="tab-bar">
-      <div class="tab active" onclick="switchTab('analyse')">📊 Analyse</div>
-      <div class="tab" onclick="switchTab('vinted')">🟢 Vinted</div>
-      <div class="tab" onclick="switchTab('ebay')">🔵 eBay</div>
-      <div class="tab" onclick="switchTab('lbc')">🟡 Leboncoin</div>
+      <button class="btn btn-gold" id="analyze-btn">⚡ Analyser & Générer les fiches</button>
+      <button class="btn btn-outline" id="back-btn">← Retour</button>
     </div>
 
-    <!-- ANALYSE TAB -->
-    <div class="tab-panel active" id="tab-analyse"></div>
+    <!-- LOADING -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <div class="loading-label" id="loading-text">Identification du livre…</div>
+      <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+    </div>
 
-    <!-- VINTED TAB -->
-    <div class="tab-panel" id="tab-vinted"></div>
+    <!-- RESULTS -->
+    <div id="results" style="display:none">
+      <div class="tab-bar">
+        <div class="tab active" onclick="switchTab('analyse')">📊 Analyse</div>
+        <div class="tab" onclick="switchTab('vinted')">🟢 Vinted</div>
+        <div class="tab" onclick="switchTab('ebay')">🔵 eBay</div>
+        <div class="tab" onclick="switchTab('lbc')">🟡 LBC</div>
+      </div>
+      <div class="tab-panel active" id="tab-analyse"></div>
+      <div class="tab-panel" id="tab-vinted"></div>
+      <div class="tab-panel" id="tab-ebay"></div>
+      <div class="tab-panel" id="tab-lbc"></div>
+      <button class="btn btn-outline" onclick="resetApp()">← Analyser un autre livre</button>
+    </div>
+  </div>
 
-    <!-- EBAY TAB -->
-    <div class="tab-panel" id="tab-ebay"></div>
-
-    <!-- LEBONCOIN TAB -->
-    <div class="tab-panel" id="tab-lbc"></div>
-
-    <button class="btn-secondary" onclick="resetApp()">← Analyser un autre livre</button>
+  <!-- PAGE HISTORIQUE -->
+  <div class="page" id="page-history">
+    <div class="history-stats" id="history-stats"></div>
+    <input class="history-search" id="history-search" placeholder="🔍 Rechercher un titre, auteur…" oninput="filterHistory()">
+    <button class="btn btn-outline btn-sm" style="margin-bottom:0.8rem;width:auto" onclick="exportCSV()">📥 Exporter CSV</button>
+    <div id="history-list"></div>
   </div>
 </main>
 
+<!-- EBAY MODAL -->
+<div class="modal-overlay" id="ebay-modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>Publier sur eBay</h3>
+    <p>Pour publier directement, tu as besoin d'un token eBay. Va sur <strong>developer.ebay.com</strong> → "User Tokens" pour le récupérer.</p>
+    <div class="form-group" style="margin-bottom:0.8rem">
+      <label>Token eBay</label>
+      <input type="text" id="ebay-token" placeholder="AgAAAA..." style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.55rem 0.7rem;color:var(--text);font-size:0.8rem;outline:none;width:100%">
+    </div>
+    <button class="btn btn-blue" onclick="submitEbay()">Publier l'annonce →</button>
+    <button class="btn btn-outline" onclick="closeModal()">Annuler</button>
+    <div id="ebay-modal-result"></div>
+  </div>
+</div>
+
 <script>
-// iOS install banner
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-if (isIOS && !window.navigator.standalone) {
-  document.getElementById('install-banner').style.display = 'block';
-}
+// iOS install
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone)
+  document.getElementById('install-banner').style.display='block';
 
-let currentFile = null, currentBase64 = null, bookData = null;
+let currentFile=null,currentBase64=null,bookData=null,allHistory=[];
 
-// FILE INPUT
-document.getElementById('file-input').addEventListener('change', function() {
-  if (this.files[0]) handleFile(this.files[0]);
-});
-
-function handleFile(f) {
-  currentFile = f;
-  document.getElementById('file-name').textContent = f.name.length > 22 ? f.name.slice(0,22)+'…' : f.name;
-  document.getElementById('file-size').textContent = (f.size/1024).toFixed(0)+' KB';
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('preview-img').src = e.target.result;
-    currentBase64 = e.target.result.split(',')[1];
-    document.getElementById('preview-wrap').style.display = 'block';
-    document.getElementById('next-btn').style.display = 'block';
+// FILE
+document.getElementById('file-input').addEventListener('change',function(){if(this.files[0])handleFile(this.files[0]);});
+function handleFile(f){
+  currentFile=f;
+  const n=f.name;
+  document.getElementById('file-name').textContent=n.length>22?n.slice(0,22)+'…':n;
+  document.getElementById('file-size').textContent=(f.size/1024).toFixed(0)+' KB';
+  const r=new FileReader();
+  r.onload=e=>{
+    document.getElementById('preview-img').src=e.target.result;
+    currentBase64=e.target.result.split(',')[1];
+    document.getElementById('preview-wrap').style.display='block';
+    document.getElementById('next-btn').style.display='block';
   };
-  reader.readAsDataURL(f);
+  r.readAsDataURL(f);
 }
 
 // NAVIGATION
-document.getElementById('next-btn').addEventListener('click', () => goStep(2));
-document.getElementById('back-btn').addEventListener('click', () => goStep(1));
-
-function goStep(n) {
-  document.getElementById('step1').style.display = n===1 ? 'block' : 'none';
-  document.getElementById('step2').style.display = n===2 ? 'block' : 'none';
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('loading').style.display = 'none';
-  ['s1','s2','s3'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    el.className = 'step' + (i+1===n ? ' active' : (i+1<n ? ' done' : ''));
+document.getElementById('next-btn').addEventListener('click',()=>goStep(2));
+document.getElementById('back-btn').addEventListener('click',()=>goStep(1));
+function goStep(n){
+  document.getElementById('step1').style.display=n===1?'block':'none';
+  document.getElementById('step2').style.display=n===2?'block':'none';
+  document.getElementById('results').style.display='none';
+  document.getElementById('loading').style.display='none';
+  ['s1','s2','s3'].forEach((id,i)=>{
+    document.getElementById(id).className='step'+(i+1===n?' active':i+1<n?' done':'');
   });
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.className='page');
+  document.getElementById('page-'+name).className='page active';
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  if(name==='history')loadHistory();
+}
+
 // ANALYZE
-document.getElementById('analyze-btn').addEventListener('click', async () => {
-  if (!currentBase64) return;
-  const btn = document.getElementById('analyze-btn');
-  btn.disabled = true;
-  btn.textContent = '⏳ En cours…';
-  document.getElementById('step2').style.display = 'none';
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('results').style.display = 'none';
-
-  // Animate progress bar
-  const bar = document.getElementById('loading-bar');
-  const msgs = ['Identification du livre…','Analyse du marché…','Calcul des marges…','Génération des fiches…','Optimisation des descriptions…'];
-  let mi = 0, pct = 0;
-  const interval = setInterval(() => {
-    mi = Math.min(mi+1, msgs.length-1);
-    pct = Math.min(pct+18, 88);
-    document.getElementById('loading-text').textContent = msgs[mi];
-    bar.style.width = pct+'%';
-  }, 1600);
-
-  try {
-    const response = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        image: currentBase64,
-        mimeType: currentFile.type || 'image/jpeg',
-        prixAchat: document.getElementById('prix-achat').value || null,
-        etat: document.getElementById('etat-livre').value || null
-      })
-    });
-
-    const book = await response.json();
-    if (book.error) throw new Error(book.error);
-    bookData = book;
-    clearInterval(interval);
-    bar.style.width = '100%';
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('s3').className = 'step active';
-      document.getElementById('s2').className = 'step done';
+document.getElementById('analyze-btn').addEventListener('click',async()=>{
+  if(!currentBase64)return;
+  const btn=document.getElementById('analyze-btn');
+  btn.disabled=true;
+  document.getElementById('step2').style.display='none';
+  document.getElementById('loading').style.display='block';
+  const bar=document.getElementById('loading-bar');
+  const msgs=['Identification du livre…','Analyse du marché…','Calcul des prix…','Génération des fiches…'];
+  let mi=0,pct=0;
+  const iv=setInterval(()=>{mi=Math.min(mi+1,msgs.length-1);pct=Math.min(pct+22,88);document.getElementById('loading-text').textContent=msgs[mi];bar.style.width=pct+'%';},1400);
+  try{
+    const resp=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:currentBase64,mimeType:currentFile.type||'image/jpeg',
+        prixAchat:document.getElementById('prix-achat').value||null,
+        etat:document.getElementById('etat-livre').value||null})});
+    const book=await resp.json();
+    if(book.error)throw new Error(book.error);
+    bookData=book;
+    // Save to history
+    saveToHistory(book);
+    clearInterval(iv);bar.style.width='100%';
+    setTimeout(()=>{
+      document.getElementById('loading').style.display='none';
+      document.getElementById('s3').className='step active';
+      document.getElementById('s2').className='step done';
       renderResults(book);
-    }, 400);
-  } catch(err) {
-    clearInterval(interval);
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('step2').style.display = 'block';
-    document.getElementById('s2').className = 'step active';
-    document.getElementById('results').innerHTML = `<div class="error-card">⚠️ ${err.message}<br><br>Vérifie ta clé API dans les variables d'environnement Vercel.</div>`;
-    document.getElementById('results').style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '⚡ Analyser & Générer les fiches';
+    },300);
+  }catch(err){
+    clearInterval(iv);
+    document.getElementById('loading').style.display='none';
+    document.getElementById('step2').style.display='block';
+    document.getElementById('s2').className='step active';
+    document.getElementById('results').innerHTML=`<div class="error-card">⚠️ ${err.message}</div>`;
+    document.getElementById('results').style.display='block';
+    btn.disabled=false;
   }
+  btn.disabled=false;btn.textContent='⚡ Analyser & Générer les fiches';
 });
 
-// TABS
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const names = ['analyse','vinted','ebay','lbc'];
-    t.className = 'tab' + (names[i]===name ? ' active' : '');
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => p.className = 'tab-panel');
-  document.getElementById('tab-'+name).className = 'tab-panel active';
+function switchTab(name){
+  const names=['analyse','vinted','ebay','lbc'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.className='tab'+(names[i]===name?' active':''));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.className='tab-panel');
+  document.getElementById('tab-'+name).className='tab-panel active';
 }
 
-// COPY
-function copyText(el, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    const hint = el.querySelector('.copy-hint');
-    if (hint) { hint.textContent = '✓ Copié !'; hint.className = 'copy-hint copy-success'; setTimeout(() => { hint.textContent = 'Appuie pour copier'; hint.className = 'copy-hint'; }, 2000); }
-  }).catch(() => {
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  });
+function copyText(el,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const h=el.querySelector('.copy-hint');
+    if(h){h.textContent='✓ Copié!';h.className='copy-hint copy-ok';setTimeout(()=>{h.textContent='Copier';h.className='copy-hint';},2000);}
+  }).catch(()=>{const r=document.createRange();r.selectNodeContents(el);window.getSelection().removeAllRanges();window.getSelection().addRange(r);});
 }
 
-function copyHashtag(el, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = el.textContent;
-    el.textContent = '✓';
-    setTimeout(() => el.textContent = orig, 1500);
+function copyHashtag(el,text){
+  navigator.clipboard.writeText(text).then(()=>{const o=el.textContent;el.textContent='✓';setTimeout(()=>el.textContent=o,1500);});
+}
+
+// OPEN APPS
+function openVinted(fiche){
+  const txt=fiche.titre+'\n\n'+fiche.description+'\n\n'+(fiche.hashtags||[]).join(' ');
+  navigator.clipboard.writeText(txt).then(()=>{
+    window.open('https://www.vinted.fr/items/new','_blank');
+    setTimeout(()=>alert('✓ Texte copié ! Colle-le dans Vinted.'),500);
   });
 }
 
-// RENDER
-function renderResults(b) {
-  const potMap = {high:{label:'🟢 Fort potentiel',cls:'high'},medium:{label:'🟡 Potentiel moyen',cls:'medium'},low:{label:'🔴 Faible potentiel',cls:'low'}};
-  const v = potMap[b.potentiel] || potMap.medium;
-  const months = ['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','nov','dec'];
-  const mLabels = ['J','F','M','A','M','J','J','A','S','O','N','D'];
-  const maxV = Math.max(...months.map(m => b.saisonnalite[m]||0));
+function openLBC(fiche){
+  const txt=fiche.titre+'\n\n'+fiche.description;
+  navigator.clipboard.writeText(txt).then(()=>{
+    window.open('https://www.leboncoin.fr/deposer-une-annonce','_blank');
+    setTimeout(()=>alert('✓ Texte copié ! Colle-le dans Leboncoin.'),500);
+  });
+}
 
-  // --- ANALYSE TAB ---
-  const monthBars = months.map((m,i) => {
-    const val = b.saisonnalite[m]||0;
-    const h = Math.round((val/maxV)*48);
-    const col = val>=maxV*0.8 ? '#c9a84c' : val>=maxV*0.5 ? '#6a8fc4' : '#332e24';
-    return `<div class="month-bar"><div class="month-fill" style="height:${h}px;background:${col};"></div><div class="month-label">${mLabels[i]}</div></div>`;
-  }).join('');
+function openEbayModal(){document.getElementById('ebay-modal').style.display='flex';}
+function closeModal(){document.getElementById('ebay-modal').style.display='none';}
 
-  const platRows = (b.plateformes||[]).sort((a,b)=>b.score-a.score).map(p =>
-    `<div class="platform-row">
-      <span class="platform-name">${p.nom}</span>
-      <span class="platform-price">${p.prix_moyen}€</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${p.score}%"></div></div>
-    </div>`
-  ).join('');
+async function submitEbay(){
+  const token=document.getElementById('ebay-token').value.trim();
+  if(!token){alert('Entre ton token eBay.');return;}
+  const res=document.getElementById('ebay-modal-result');
+  res.innerHTML='<div style="color:var(--text-dim);font-size:0.8rem;margin-top:0.5rem">Publication en cours…</div>';
+  try{
+    const resp=await fetch('/api/ebay',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({book:bookData,ebayToken:token})});
+    const data=await resp.json();
+    if(data.success){
+      res.innerHTML=`<div class="ebay-result">✅ Annonce publiée ! <a href="${data.url}" target="_blank">Voir sur eBay →</a></div>`;
+      localStorage.setItem('ebay_token',token);
+    }else{
+      res.innerHTML=`<div class="error-card">⚠️ ${data.error}</div>`;
+    }
+  }catch(err){res.innerHTML=`<div class="error-card">⚠️ ${err.message}</div>`;}
+}
 
-  const ptValeur = (b.points_valeur||[]).map(p =>
-    `<li style="margin-bottom:0.3rem;padding-left:0.9rem;position:relative;color:var(--text-dim);font-size:0.8rem;"><span style="position:absolute;left:0;color:var(--gold)">›</span>${p}</li>`
-  ).join('');
+// Pre-fill saved token
+window.addEventListener('load',()=>{
+  const t=localStorage.getItem('ebay_token');
+  if(t)document.getElementById('ebay-token').value=t;
+});
 
-  document.getElementById('tab-analyse').innerHTML = `
+function renderResults(b){
+  const potMap={high:{label:'🟢 Fort potentiel',cls:'high'},medium:{label:'🟡 Potentiel moyen',cls:'medium'},low:{label:'🔴 Faible potentiel',cls:'low'}};
+  const v=potMap[b.potentiel]||potMap.medium;
+  const months=['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','nov','dec'];
+  const mL=['J','F','M','A','M','J','J','A','S','O','N','D'];
+  const maxV=Math.max(...months.map(m=>b.saisonnalite[m]||0));
+
+  const monthBars=months.map((m,i)=>{const val=b.saisonnalite[m]||0;const h=Math.round((val/maxV)*44);const col=val>=maxV*0.8?'#c9a84c':val>=maxV*0.5?'#6a8fc4':'#332e24';
+    return `<div class="month-bar"><div class="month-fill" style="height:${h}px;background:${col};"></div><div class="month-label">${mL[i]}</div></div>`;}).join('');
+
+  const platRows=(b.plateformes||[]).sort((a,b)=>b.score-a.score).map(p=>
+    `<div class="platform-row"><span style="color:var(--text);flex:1">${p.nom}</span><span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-dim)">${p.prix_moyen}€</span><div class="bar-wrap"><div class="bar-fill" style="width:${p.score}%"></div></div></div>`).join('');
+
+  document.getElementById('tab-analyse').innerHTML=`
     <div class="book-header">
       <img class="book-thumb" src="${document.getElementById('preview-img').src}" alt="">
       <div class="book-meta">
@@ -442,117 +467,160 @@ function renderResults(b) {
         <div class="tags">
           ${b.genre?`<span class="tag tag-genre">${b.genre}</span>`:''}
           ${b.annee_estimee?`<span class="tag tag-year">${b.annee_estimee}</span>`:''}
-          ${b.edition?`<span class="tag tag-edition">${b.edition}</span>`:''}
           ${b.rarete&&b.rarete!=='commun'?`<span class="tag tag-rare">${b.rarete}</span>`:''}
         </div>
       </div>
     </div>
     <div class="score-banner">
-      <div class="score-item">
-        <div class="score-label">Prix optimal</div>
-        <div class="score-value">${b.prix_vente_optimal}€</div>
-        <div class="score-sub">${b.fourchette_min}€–${b.fourchette_max}€</div>
-      </div>
-      <div class="score-item">
-        <div class="score-label">Marge</div>
-        <div class="score-value">${b.marge_estimee}%</div>
-        <div class="score-sub">Achat ~${b.prix_achat_estime}€</div>
-      </div>
-      <div class="score-item">
-        <div class="score-label">Pic de vente</div>
-        <div class="score-value" style="font-size:0.85rem;padding-top:0.3rem">${b.meilleure_plateforme}</div>
-        <div class="score-sub">${b.meilleure_periode}</div>
-      </div>
+      <div class="score-item"><div class="score-label">Prix optimal</div><div class="score-value">${b.prix_vente_optimal}€</div><div class="score-sub">${b.fourchette_min}–${b.fourchette_max}€</div></div>
+      <div class="score-item"><div class="score-label">Marge</div><div class="score-value">${b.marge_estimee}%</div><div class="score-sub">Achat ~${b.prix_achat_estime}€</div></div>
+      <div class="score-item"><div class="score-label">Meilleur moment</div><div class="score-value" style="font-size:0.8rem;padding-top:0.3rem">${b.meilleure_periode}</div><div class="score-sub">${b.meilleure_plateforme}</div></div>
     </div>
-    <div class="info-card">
-      <h3>Plateformes — Score & Prix moyen</h3>
-      ${platRows}
-    </div>
-    <div class="info-card">
-      <h3>Saisonnalité</h3>
-      <div class="months-grid">${monthBars}</div>
-      <div style="font-size:0.75rem;color:var(--text-dim)">Meilleure période : <span style="color:var(--gold)">${b.meilleure_periode}</span></div>
-    </div>
-    ${ptValeur?`<div class="info-card"><h3>Points de valeur</h3><ul style="list-style:none">${ptValeur}</ul></div>`:''}
-    <div class="advice-card advice-gold">
+    <div class="card"><h3>Plateformes</h3>${platRows}</div>
+    <div class="card"><h3>Saisonnalité</h3><div class="months-grid">${monthBars}</div><div style="font-size:0.72rem;color:var(--text-dim)">Pic : <span style="color:var(--gold)">${b.meilleure_periode}</span></div></div>
+    <div class="card" style="background:var(--gold-dim);border-color:rgba(201,168,76,0.2)">
       <div class="verdict ${v.cls}">${v.label}</div>
-      <h3>💰 Stratégie de prix</h3>
-      <p>${b.conseil_prix||'—'}</p>
-      ${b.etat_impact?`<p style="margin-top:0.5rem;font-size:0.75rem;color:var(--text-muted)">📋 ${b.etat_impact}</p>`:''}
-    </div>
-    ${b.risques?`<div style="padding:0.6rem 0.8rem;border-radius:8px;background:rgba(196,106,90,0.08);border:1px solid rgba(196,106,90,0.2);font-size:0.78rem;color:var(--red);margin-bottom:0.8rem;">⚠️ ${b.risques}</div>`:''}
-  `;
+      <div style="font-size:0.82rem;color:var(--text);line-height:1.6">${b.conseil_prix||'—'}</div>
+    </div>`;
 
-  // --- FICHE HELPER ---
-  function ficheCard(platform, badgeClass, data) {
-    if (!data) return `<div class="error-card">Fiche non disponible.</div>`;
-    const hashtagsHtml = (data.hashtags||[]).map(h =>
-      `<span class="hashtag" onclick="copyHashtag(this,'${h}')">${h}</span>`
-    ).join('');
-    const extraFields = platform==='eBay' ? `
-      <div class="fiche-section">
-        <div class="fiche-label">Type de vente</div>
-        <div class="fiche-content">${data.type_vente||'—'}${data.duree_encheres?' · '+data.duree_encheres:''}</div>
-      </div>` : '';
-    const categorieField = data.categorie ? `
-      <div class="fiche-section">
-        <div class="fiche-label">Catégorie suggérée</div>
-        <div class="fiche-content">${data.categorie}</div>
-      </div>` : '';
-    return `
-      <div class="fiche-card">
-        <div class="fiche-header">
-          <span class="fiche-platform">${platform}</span>
-          <span class="fiche-platform-badge ${badgeClass}">${data.prix_suggere}€ suggérés</span>
-        </div>
-        <div class="fiche-body">
-          <div class="fiche-section">
-            <div class="fiche-label">Titre de l'annonce</div>
-            <div class="fiche-content copyable" onclick="copyText(this,'${(data.titre||'').replace(/'/g,"\\'")}')">
-              <span class="copy-hint">Appuie pour copier</span>
-              ${data.titre||'—'}
-            </div>
-          </div>
-          <div class="fiche-section">
-            <div class="fiche-label">Description</div>
-            <div class="fiche-content copyable" onclick="copyText(this,this.dataset.full)" data-full="${(data.description||'').replace(/"/g,'&quot;').replace(/'/g,"\\'")}">
-              <span class="copy-hint">Appuie pour copier</span>
-              ${(data.description||'—').replace(/\n/g,'<br>')}
-            </div>
-          </div>
-          ${hashtagsHtml?`<div class="fiche-section"><div class="fiche-label">Hashtags (appuie pour copier)</div><div class="hashtags-wrap">${hashtagsHtml}</div></div>`:''}
-          ${categorieField}
-          ${extraFields}
-          <div class="prix-row">
-            <div>
-              <div class="fiche-label">Prix suggéré</div>
-              <div class="prix-info">Fourchette : ${b.fourchette_min}€–${b.fourchette_max}€</div>
-            </div>
-            <div class="prix-value">${data.prix_suggere}€</div>
-          </div>
-        </div>
-      </div>`;
+  function ficheTab(platform,badgeClass,fiche,publishBtns){
+    if(!fiche)return`<div class="error-card">Fiche non disponible.</div>`;
+    const hh=(fiche.hashtags||[]).map(h=>`<span class="hashtag" onclick="copyHashtag(this,'${h}')">${h}</span>`).join('');
+    return`<div class="fiche-card">
+      <div class="fiche-header"><span class="fiche-platform">${platform}</span><span class="badge ${badgeClass}">${fiche.prix_suggere}€</span></div>
+      <div class="fiche-body">
+        <div class="fiche-section"><div class="fiche-label">Titre</div>
+          <div class="fiche-content" onclick="copyText(this,'${(fiche.titre||'').replace(/'/g,"\\'")}')"><span class="copy-hint">Copier</span>${fiche.titre||'—'}</div></div>
+        <div class="fiche-section"><div class="fiche-label">Description</div>
+          <div class="fiche-content" onclick="copyText(this,this.dataset.full)" data-full="${(fiche.description||'').replace(/"/g,'&quot;').replace(/'/g,"\\'")}"><span class="copy-hint">Copier</span>${(fiche.description||'—').replace(/\n/g,'<br>')}</div></div>
+        ${hh?`<div class="fiche-section"><div class="fiche-label">Hashtags</div><div class="hashtags-wrap">${hh}</div></div>`:''}
+        <div class="prix-row"><div><div class="fiche-label">Prix suggéré</div><div class="prix-info">${b.fourchette_min}–${b.fourchette_max}€</div></div><div class="prix-value">${fiche.prix_suggere}€</div></div>
+        ${publishBtns}
+      </div></div>`;
   }
 
-  document.getElementById('tab-vinted').innerHTML = ficheCard('Vinted','badge-vinted', b.fiche_vinted);
-  document.getElementById('tab-ebay').innerHTML = ficheCard('eBay','badge-ebay', b.fiche_ebay);
-  document.getElementById('tab-lbc').innerHTML = ficheCard('Leboncoin','badge-lbc', b.fiche_leboncoin);
+  document.getElementById('tab-vinted').innerHTML=ficheTab('Vinted','badge-vinted',b.fiche_vinted,
+    `<div class="publish-btns">
+      <button class="publish-btn pub-vinted" onclick="openVinted(bookData.fiche_vinted)">🟢 Ouvrir Vinted</button>
+      <button class="publish-btn pub-copy" onclick="copyText(document.createElement('div'),'${((b.fiche_vinted?.titre||'')+'\\n\\n'+(b.fiche_vinted?.description||'')+'\\n\\n'+(b.fiche_vinted?.hashtags||[]).join(' ')).replace(/'/g,"\\'")}')">📋 Tout copier</button>
+    </div>`);
 
-  document.getElementById('results').style.display = 'block';
+  document.getElementById('tab-ebay').innerHTML=ficheTab('eBay','badge-ebay',b.fiche_ebay,
+    `<div class="publish-btns">
+      <button class="publish-btn pub-ebay" onclick="openEbayModal()">🔵 Publier sur eBay</button>
+      <button class="publish-btn pub-copy" onclick="navigator.clipboard.writeText('${((b.fiche_ebay?.titre||'')+'\\n\\n'+(b.fiche_ebay?.description||'')).replace(/'/g,"\\'")}').then(()=>alert('✓ Copié!'))">📋 Tout copier</button>
+    </div>
+    <div id="ebay-inline-result"></div>`);
+
+  document.getElementById('tab-lbc').innerHTML=ficheTab('Leboncoin','badge-lbc',b.fiche_leboncoin,
+    `<div class="publish-btns">
+      <button class="publish-btn pub-lbc" onclick="openLBC(bookData.fiche_leboncoin)">🟡 Ouvrir LBC</button>
+      <button class="publish-btn pub-copy" onclick="navigator.clipboard.writeText('${((b.fiche_leboncoin?.titre||'')+'\\n\\n'+(b.fiche_leboncoin?.description||'')).replace(/'/g,"\\'")}').then(()=>alert('✓ Copié!'))">📋 Tout copier</button>
+    </div>`);
+
+  document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function resetApp() {
-  currentFile=null; currentBase64=null; bookData=null;
+// HISTORY
+async function saveToHistory(book){
+  try{
+    const thumb=document.getElementById('preview-img').src;
+    await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...book,thumb:thumb.slice(0,200)})});
+  }catch(e){console.error('History save failed',e);}
+}
+
+async function loadHistory(){
+  const list=document.getElementById('history-list');
+  const stats=document.getElementById('history-stats');
+  list.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:0.8rem">Chargement…</div>';
+  try{
+    const resp=await fetch('/api/history');
+    allHistory=await resp.json();
+    renderHistory(allHistory);
+    // Stats
+    const total=allHistory.length;
+    const avgMarge=total?Math.round(allHistory.reduce((s,b)=>s+(b.marge_estimee||0),0)/total):0;
+    const avgPrix=total?(allHistory.reduce((s,b)=>s+(b.prix_vente_optimal||0),0)/total).toFixed(0):0;
+    stats.innerHTML=`
+      <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-lbl">Livres</div></div>
+      <div class="stat-card"><div class="stat-val">${avgMarge}%</div><div class="stat-lbl">Marge moy.</div></div>
+      <div class="stat-card"><div class="stat-val">${avgPrix}€</div><div class="stat-lbl">Prix moy.</div></div>`;
+  }catch(e){list.innerHTML='<div class="error-card">Erreur de chargement. Configure Vercel KV d\'abord.</div>';}
+}
+
+function renderHistory(books){
+  const list=document.getElementById('history-list');
+  if(!books||books.length===0){list.innerHTML='<div class="history-empty">📚 Aucun livre analysé pour l\'instant.</div>';return;}
+  list.innerHTML=books.map(b=>`
+    <div class="history-item" onclick="viewHistoryBook('${b.id}')">
+      <div class="history-thumb" style="background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:1.2rem">📖</div>
+      <div class="history-info">
+        <div class="history-title">${b.titre||'Inconnu'}</div>
+        <div class="history-author">${b.auteur||'—'}</div>
+        <div class="history-meta">
+          <span class="history-price">${b.prix_vente_optimal||'?'}€</span>
+          <span class="history-date">${b.saved_at?new Date(b.saved_at).toLocaleDateString('fr'):''}</span>
+        </div>
+      </div>
+      <button class="history-del" onclick="event.stopPropagation();deleteBook('${b.id}')">🗑️</button>
+    </div>`).join('');
+}
+
+function filterHistory(){
+  const q=document.getElementById('history-search').value.toLowerCase();
+  const filtered=allHistory.filter(b=>(b.titre||'').toLowerCase().includes(q)||(b.auteur||'').toLowerCase().includes(q));
+  renderHistory(filtered);
+}
+
+async function deleteBook(id){
+  if(!confirm('Supprimer ce livre de l\'historique ?'))return;
+  await fetch(`/api/history?id=${id}`,{method:'DELETE'});
+  loadHistory();
+}
+
+function viewHistoryBook(id){
+  const book=allHistory.find(b=>b.id===id);
+  if(!book)return;
+  bookData=book;
+  showPage('analyse');
+  document.querySelector('.nav-btn').click();
+  document.getElementById('s3').className='step active';
+  document.getElementById('s1').style.display='none';
+  document.getElementById('s2').style.display='none';
+  // Fake preview
+  document.getElementById('preview-img').src='';
+  renderResults(book);
+}
+
+function exportCSV(){
+  if(!allHistory||allHistory.length===0){alert('Aucun livre à exporter.');return;}
+  const headers=['Titre','Auteur','Année','Genre','Prix achat','Prix vente','Marge %','Potentiel','Meilleure plateforme','Date'];
+  const rows=allHistory.map(b=>[
+    `"${(b.titre||'').replace(/"/g,'""')}"`,
+    `"${(b.auteur||'').replace(/"/g,'""')}"`,
+    b.annee_estimee||'',b.genre||'',
+    b.prix_achat_estime||'',b.prix_vente_optimal||'',b.marge_estimee||'',
+    b.potentiel||'',b.meilleure_plateforme||'',
+    b.saved_at?new Date(b.saved_at).toLocaleDateString('fr'):''
+  ].join(','));
+  const csv='\uFEFF'+headers.join(',')+'\n'+rows.join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='bookflip_catalogue.csv';
+  a.click();
+}
+
+function resetApp(){
+  currentFile=null;currentBase64=null;bookData=null;
   document.getElementById('file-input').value='';
   document.getElementById('preview-img').src='';
   document.getElementById('preview-wrap').style.display='none';
   document.getElementById('next-btn').style.display='none';
   document.getElementById('results').style.display='none';
-  document.getElementById('results').innerHTML='';
   document.getElementById('prix-achat').value='';
   document.getElementById('etat-livre').value='';
-  document.querySelectorAll('.tab-panel').forEach(p=>p.innerHTML='');
   goStep(1);
 }
 </script>
